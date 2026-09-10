@@ -1030,7 +1030,6 @@ footer p {
 .site-header {
   position: relative;
   height: 132px;
-  border-top: 3px solid #1b1b1b;
   border-bottom: 1px solid #ececec;
 }
 .site-header .header-inner {
