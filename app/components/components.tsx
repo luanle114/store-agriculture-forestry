@@ -1,9 +1,20 @@
 "use client";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { ChevronDown, Search } from "lucide-react";
+import { ChevronDown, Menu, Search, X } from "lucide-react";
 import { categories, formatPrice, Product } from "../data";
 export function Header() {
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const navLinks = [
+    { href: "/", label: "Trang chủ", active: true },
+    { href: "/category", label: "Gia vị nấu ăn" },
+    { href: "/category", label: "Cooking Wine" },
+    { href: "/category", label: "Gia vị nấu lẩu" },
+    { href: "/category", label: "Mì & Noodle" },
+    { href: "/category", label: "Tin tức" },
+    { href: "/category", label: "Liên hệ" },
+  ];
+
   return (
     <>
       <div className="topbar">
@@ -76,7 +87,92 @@ export function Header() {
         </div>
         </div>
       </header>
-      <nav className="main-nav"><div className="nav-inner"><div className="category-dropdown"><Link href="/category" className="all-categories">☰ &nbsp; DANH MỤC SẢN PHẨM <ChevronDown size={15}/></Link><div className="category-dropdown-list">{categories.map(c=><Link href="/category" key={c}>{c}<span>›</span></Link>)}</div></div><Link href="/" className="active">Trang chủ</Link><Link href="/category">Gia vị nấu ăn</Link><Link href="/category">Cooking Wine</Link><Link href="/category">Gia vị nấu lẩu</Link><Link href="/category">Mì & Noodle</Link><Link href="/category">Tin tức</Link><Link href="/category">Liên hệ</Link></div></nav>
+      <nav className="main-nav">
+        <div className="nav-inner">
+          <button
+            className="mobile-menu-trigger"
+            type="button"
+            aria-label="Mở menu"
+            aria-expanded={sidebarOpen}
+            onClick={() => setSidebarOpen(true)}
+          >
+            <Menu size={21} />
+            <span>Danh mục</span>
+          </button>
+          <div className="category-dropdown">
+            <Link href="/category" className="all-categories">
+              ☰ &nbsp; DANH MỤC SẢN PHẨM <ChevronDown size={15} />
+            </Link>
+            <div className="category-dropdown-list">
+              {categories.map((c) => (
+                <Link href="/category" key={c}>
+                  {c}
+                  <span>›</span>
+                </Link>
+              ))}
+            </div>
+          </div>
+          <div className="desktop-nav-links">
+            {navLinks.map((link) => (
+              <Link
+                href={link.href}
+                className={link.active ? "active" : undefined}
+                key={link.label}
+              >
+                {link.label}
+              </Link>
+            ))}
+          </div>
+        </div>
+      </nav>
+      <div
+        className={`mobile-nav-overlay${sidebarOpen ? " open" : ""}`}
+        onClick={() => setSidebarOpen(false)}
+      />
+      <aside
+        className={`mobile-sidebar${sidebarOpen ? " open" : ""}`}
+        aria-hidden={!sidebarOpen}
+      >
+        <div className="mobile-sidebar-head">
+          <Link href="/" className="brand" onClick={() => setSidebarOpen(false)}>
+            <span>
+              YU
+              <br />
+              MEI
+            </span>
+            <small>ONESE SPICES AND SAUCES</small>
+          </Link>
+          <button
+            type="button"
+            aria-label="Đóng menu"
+            onClick={() => setSidebarOpen(false)}
+          >
+            <X size={21} />
+          </button>
+        </div>
+        <div className="mobile-sidebar-section">
+          <strong>Danh mục sản phẩm</strong>
+          {categories.map((c) => (
+            <Link href="/category" key={c} onClick={() => setSidebarOpen(false)}>
+              {c}
+              <span>›</span>
+            </Link>
+          ))}
+        </div>
+        <div className="mobile-sidebar-section">
+          <strong>Điều hướng</strong>
+          {navLinks.map((link) => (
+            <Link
+              href={link.href}
+              className={link.active ? "active" : undefined}
+              key={link.label}
+              onClick={() => setSidebarOpen(false)}
+            >
+              {link.label}
+            </Link>
+          ))}
+        </div>
+      </aside>
     </>
   );
 }
